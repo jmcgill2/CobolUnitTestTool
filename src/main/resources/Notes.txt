@@ -1,0 +1,93 @@
+Negative Testing
+
+If we generate a map of each data element and give it a unique number, we can generate a negative testing indicator for
+every data element.  Then, with each test, we can do negative test validation on every element except those we have
+indicated should not be tested.
+
+Negative validation should not be done on
+* values we expected to change
+* values that redefined values we expected to change (or were part of a group level redefines and we did not want to
+take a chance).
+
+This negative testing paragraph will be large.  is there such a think as too large?  For example, if we have 500 variables
+we will be making 500 variable checks.
+
+We may not need to check group variables (or will we to check filler?) so that could limit.  Or perhaps we can use group
+variables to minimize the amount of negative checking.
+
+We cannot check filler values directly.
+
+We need to include comments with the indicators and the checks in the negative testing paragraph to make sure that it is
+easy to determine where we are checking a variable.
+
+We need an easy way to identify (at least at the group level) if a value that is changed is either a redefines of one or
+more values (those cannot be tested) or is itself redefined by one or more values (those cannot be tested either) or both.
+
+We need to know the value of each for initialization so we can set up the correct negative test value to compare against.
+
+Data Elements
+
+We need to know the redefines of every data element (both what redefines it and what it redefines).
+
+We need to know where in the program these data elements are used
+
+Initialization
+
+We need to move spaces to all the group elements.  This will help with Filler which cannot be initialized any other way.
+
+We need to understand how all the initializations work so we know what to use to do negative testing with.
+
+The initialization paragraph should move spaces to all group variables and then initialize all group variables.
+
+We may discover this approach does not work in all cases.
+
+For redefines we may have a problem.  We will initialize the group level that is redefined only to start with and see
+where that gets us.
+
+Mocking Paragraphs
+
+We will mock the following Paragraphs:
+
+1)  Paragraphs that call other programs
+2)  Paragraphs that execute SQL
+3)  Paragraphs that read and write to files
+
+Mocking Parts of Paragraphs
+
+We will mock the following lines in a paragraph we will otherwise keep whole and run tests against:
+
+1)  Calls to other programs
+2)  Read statements
+3)  Write statements
+4)  Exe SQL statements
+
+Mocking Calls to a Program
+
+To mock a call to the program we will do one of the following (depending on what mattered for the program):
+
+1)  Create a mock paragraph that increments a call to the paragraph
+2)  Create a mock paragraph that returns values provided by the tester
+
+Multiple calls that return different values will either generate ...
+
+1)  Multiple paragraphs that are generated and called only once
+2)  A single paragraph called but an if statement checking the value in an integer value and return values based on which iteration we were on.
+3)  A single paragraph called but an if statement checking the value in an integer value and perform a new paragraph that set the key values.
+
+Mocking and Working Storage Implications
+
+If we are mocking multiple inputs (as from a read statement, a called program or an sql select statement) we will need
+to track which one we are on with a working storage value and populated with a move statement in the testing paragraph.
+
+The Testing Paragraph
+
+1)  Initalize
+2)  Set input values
+3)  Set any testing variables to the right values
+    a)  Set any test vales for calls, reads, writes or sql statements
+    b)  Set the ignore settings to avoid negative checks on either the values we expect to change or redefines of
+        those values.
+4)  Run the Paragraph
+5)  Validate the results
+    a)  Check the expected results
+    b)  Validate negative checks
