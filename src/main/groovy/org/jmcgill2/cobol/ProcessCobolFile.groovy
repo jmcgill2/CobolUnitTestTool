@@ -1,5 +1,6 @@
 package org.jmcgill2.cobol
 
+import groovy.util.logging.Slf4j
 import org.jmcgill2.cobol.data.CobolCopybook
 import org.jmcgill2.cobol.data.CobolLine
 import org.jmcgill2.cobol.data.CobolParagraph
@@ -11,6 +12,7 @@ import java.nio.file.Paths
 /**
  * Created by jamesmcgill on 5/19/17.
  */
+@Slf4j
 class ProcessCobolFile {
 
     FileUtils fileUtis = new FileUtils()
@@ -21,6 +23,8 @@ class ProcessCobolFile {
     }
 
     public void run() {
+        log.info("HERE!")
+        log.error("HERE2")
 //        File f = Paths.get(Thread.currentThread().getContextClassLoader().getResource("WMS910_PGM.txt").toURI()).toFile()
         File f = new File("/Users/jamesmcgill/jim/WMS910_PGM.txt")
         println "f.name = ${f.name}"

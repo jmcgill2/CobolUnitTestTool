@@ -1,11 +1,13 @@
 package org.jmcgill2.cobol.data
 
+import groovy.util.logging.Slf4j
 import org.jmcgill2.cobol.utils.CobolUtils
 
 /**
  * Stores a Data Element and the key Information about it
  * Created by jamesmcgill on 5/12/17.
  */
+@Slf4j
 class DataElement {
 
     public enum DataElementLocation{
@@ -160,14 +162,36 @@ class DataElement {
 
     }
 
+    /**
+     * Finds the data element level number in the data element line and returns it as a String.
+     * @return  String containing the data element leven number.
+     */
     private String generateDataElementLevel(){
         def toks = dataElementLine.tokenize(" ")
-        dataElementLevel = toks[0]
+        String level = toks[0]
+
+        return level
     }
 
+    /**
+     * Finds the data element name in the data element line and returns it as a String.
+     * @return  String containing the data element name.
+     */
     private String generateDataElementName(){
         def toks = dataElementLine.tokenize(" ")
-        return toks[1]
+
+        String name
+        if (toks.size() > 2) {
+            name = toks[1]
+        } else {
+            name = ""
+        }
+
+        if (name.endsWith('.')){
+            name = name - '.'
+        }
+
+        name
     }
 
     public String toString(){
