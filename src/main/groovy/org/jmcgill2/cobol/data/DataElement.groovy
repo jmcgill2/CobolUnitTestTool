@@ -131,20 +131,8 @@ class DataElement {
     }
 
     public DataElement(ArrayList<CobolLine> cobolLines, int cobolLineNum ){
-        CobolLine cobolLine = cobolLines[cobolLineNum]
-        String elementString = cobolLine.get7Thru72()
-        int counter = cobolLineNum
-        while (!cobolLine.endsWithAPeriod) {
-            counter++
-            cobolLine = cobolLines[counter]
-            elementString += cobolLine.get7Thru72()
-        }
 
-        while(elementString.contains("  ")){
-            elementString = elementString.replaceAll("  ", " ")
-        }
-
-        dataElementLine = elementString
+        dataElementLine = generateDataElement(cobolLines, cobolLineNum)
 
         dataElementName = generateDataElementName()
 
@@ -153,13 +141,42 @@ class DataElement {
         if (!(dataElementLine.contains(" PIC ") || dataElementLine.contains(" PICTURE "))){
             isGroupElement = true
             groupDataElementName = dataElementName
+        } else {
+            //TODO Add group data element processing to identify the group element name.
+            isGroupElement = false
         }
 
         if (dataElementLine.contains(" REDEFINES ")){
             isRedefines = true
         }
 
+    }
 
+    /**
+     * Joins the entire data element definition into a single line even if the definition is contained in mulitple
+     * Cobol Lines.
+     * @param cobolLines        ArrayList of CobolLine instances
+     * @param cobolLineNum      The location in the Array to begin piecing together the data element definition.
+     * @return                  String containing the data element information.
+     */
+    private String generateDataElement(ArrayList<CobolLine> cobolLines, int cobolLineNum){
+
+        CobolLine cobolLine = cobolLines[cobolLineNum]
+        String elementString = cobolLine.get7Thru72()
+        int counter = cobolLineNum
+        while (!cobolLine.endsWithAPeriod) {
+            counter++
+            cobolLine = cobolLines[counter]
+            if (!cobolLine.isComment){
+                elementString += cobolLine.get7Thru72()
+            }
+        }
+
+        while(elementString.contains("  ")){
+            elementString = elementString.replaceAll("  ", " ")
+        }
+
+        return elementString
     }
 
     /**
@@ -168,7 +185,14 @@ class DataElement {
      */
     private String generateDataElementLevel(){
         def toks = dataElementLine.tokenize(" ")
-        String level = toks[0]
+
+        String level
+
+        if (toks.size() > 0){
+            level = toks[0]
+        } else {
+            level = ""
+        }
 
         return level
     }
@@ -181,7 +205,7 @@ class DataElement {
         def toks = dataElementLine.tokenize(" ")
 
         String name
-        if (toks.size() > 2) {
+        if (toks.size() > 1) {
             name = toks[1]
         } else {
             name = ""
@@ -191,7 +215,7 @@ class DataElement {
             name = name - '.'
         }
 
-        name
+        return name
     }
 
     public String toString(){
