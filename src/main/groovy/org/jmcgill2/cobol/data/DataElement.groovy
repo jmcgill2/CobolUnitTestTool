@@ -27,16 +27,26 @@ class DataElement {
     boolean isGroupElement
 
     /**
+     * True if the element is an 01 or 77 level element and false otherwise.
+     */
+    boolean isTopLevelElement
+
+    /**
      * True if the data element either directly redefines another data element or is part of a group and that
      * group level data element redefines another data element.
      */
-    boolean isRedefines
+    boolean redefinesAnotherDataElement
+
+    /**
+     * Element Name of the redefined data element
+     */
+    String redefinedDataElementName
 
     /**
      * True if (1) the data element is either directly redefined by one or more data elements, (2) is not a group level
      * data element and it's group level data element is redefined by one or (3) both 1 and 2 are true.
      */
-    boolean isRedefinedBy
+    boolean isRedefinedByAnotherDataElement
 
     /**
      * True if the data element has a predefined value.
@@ -130,25 +140,155 @@ class DataElement {
 
     }
 
+    /**
+     * Constructor that takes a list of CobolLine objects and a line number.  This allows for the creation of a data
+     * element that takes more than one CobolLine.
+     * @param cobolLines    List of CobolLine objects
+     * @param cobolLineNum  Location in the List of CobolLine objects that begins the data element information.
+     */
     public DataElement(ArrayList<CobolLine> cobolLines, int cobolLineNum ){
 
         dataElementLine = generateDataElement(cobolLines, cobolLineNum)
 
         dataElementName = generateDataElementName()
 
+        isGroupElement = determineGroupElement()
+
         dataElementLevel = generateDataElementLevel()
 
-        if (!(dataElementLine.contains(" PIC ") || dataElementLine.contains(" PICTURE "))){
-            isGroupElement = true
+        isTopLevelElement = determineTopLevelElement()
+
+        if (dataElementLine.contains(" REDEFINES ")){
+            redefinesAnotherDataElement = true
+            redefinedDataElementName = determineRedefinedElementName()
+        }
+
+        dataElementPicClause = generatePicClause()
+
+        value = identifyValueIfAny()
+
+    }
+
+    public String identifyValueIfAny() {
+        String val
+
+        if (dataElementLine.contains (" VALUE ")){
+             String tmp = dataElementLine.substring(dataElementLine.indexOf(" VALUE ") + 7)
+            tmp = tmp.trim()
+            if (tmp.startsWith("'")){
+                int loc = tmp.lastIndexOf("'") + 1
+                tmp = tmp.substring(0, loc)
+            }else if (tmp.startsWith('"')){
+                int loc = tmp.lastIndexOf('"') + 1
+                tmp = tmp.substring(0, loc)
+            }else {
+                def toks = tmp.tokenize(" ")
+                tmp = toks[0]
+            }
+            if (tmp.endsWith(".")){
+                tmp = tmp - "."
+            }
+            val = tmp
+        }
+
+        return val
+    }
+
+    public String generatePicClause() {
+        String picClause
+
+        if (dataElementLine.contains(" PIC ")){
+            if (dataElementLine.contains(" VALUE ")){
+                picClause = dataElementLine.substring(dataElementLine.indexOf(" PIC ") + 5, dataElementLine.indexOf(" VALUE "))
+            } else {
+                picClause = dataElementLine.substring(dataElementLine.indexOf(" PIC ") + 5).trim()
+                if (picClause.endsWith(".")){
+                    picClause = picClause - "."
+                }
+            }
+        } else if (dataElementLine.contains(" PICTURE ")){
+
+            if (dataElementLine.contains(" VALUE ")){
+                picClause = dataElementLine.substring(dataElementLine.indexOf(" PICTURE ") + 9, dataElementLine.indexOf(" VALUE "))
+            } else {
+                picClause = dataElementLine.substring(dataElementLine.indexOf(" PICTURE ") + 9).trim()
+                if (picClause.endsWith(".")){
+                    picClause = picClause - "."
+                }
+            }
+        }
+        return picClause
+    }
+
+    /**
+     * Extracts redefined data element from dataElementLine.
+     * @return  String containing the name of the data element redefined by this data element.
+     */
+    public String determineRedefinedElementName(){
+
+        return determineRedefinedElementName(dataElementLine)
+    }
+
+    /**
+     * Extracts redefined data element from line provided.
+     * @param line  String containing data element information.
+     * @return  String containing the name of the data element redefined by this data element.
+     */
+    public String determineRedefinedElementName(String line){
+
+        String tmpLine = line.substring(dataElementLine.indexOf("REDEFINES "))
+        def toks = tmpLine.tokenize(" ")
+        String redef = toks[1]
+        if (redef.endsWith(".")){
+            redef = redef.substring(0, redef.size() - 2)
+        }
+
+        return redef
+    }
+
+    /**
+     * Returns true if the dataElementLevel is 01 or 77 and false otherwise.
+     * @return true if the dataElementLevel is 01 or 77 and false otherwise.
+     */
+    public boolean determineTopLevelElement() {
+        return determineTopLevelElement(dataElementLevel)
+    }
+
+    /**
+     * Returns true if the level is 01 or 77 and false otherwise.
+     * @param level String containing a level indicator for a data element.
+     * @return  true if the level is 01 or 77 and false otherwise.
+     */
+    public boolean determineTopLevelElement(String level){
+        return (dataElementLevel == '01' || dataElementLevel == "77") ? true : false
+    }
+
+    /**
+     * Returns true if the dataElementLine contains a group level element and false otherwise.
+     * @return  true if the dataElementLine contains a group level element and false otherwise.
+     */
+    public boolean determineGroupElement(){
+        return determineGroupElement(dataElementLine)
+    }
+
+    /**
+     * Returns true if the line contains a group level data element.
+     * @param line  String containing data element information.
+     * @return  true if the data element is a group level data element and false otherwise.
+     */
+    public boolean determineGroupElement(String line){
+
+        boolean bool
+
+        if (!(line.contains(" PIC ") || line.contains(" PICTURE "))){
+            bool = true
             groupDataElementName = dataElementName
         } else {
             //TODO Add group data element processing to identify the group element name.
-            isGroupElement = false
+            bool = false
         }
 
-        if (dataElementLine.contains(" REDEFINES ")){
-            isRedefines = true
-        }
+        return bool
 
     }
 

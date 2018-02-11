@@ -1,5 +1,6 @@
 package org.jmcgill2.cobol.data
 
+import org.jmcgill2.cobol.ProcessCopybooks
 import org.jmcgill2.cobol.utils.CobolUtils
 
 /**
@@ -23,6 +24,8 @@ class CobolProgram {
 
     CobolUtils cobolUtils = new CobolUtils()
 
+
+
     public CobolProgram() {
 
     }
@@ -37,11 +40,12 @@ class CobolProgram {
 
     }
 
-    public CobolProgram(ArrayList<String> lines){
-        cobolLines = lines
-        workingStorage = new WorkingStorage(lines)
+    public CobolProgram(ProgramElements programElements){
+        this.programName = programElements.programName
+        this.cobolLines = programElements.programLines
+        this.workingStorage = new WorkingStorage(programElements)
+        this.procedureDivision = new ProcedureDivision(cobolLines)
 
-        procedureDivision = new ProcedureDivision(lines)
     }
 
     public ArrayList<String> getWorkingStorageLines() {

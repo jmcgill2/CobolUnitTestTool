@@ -33,7 +33,8 @@ class CobolLine {
         this.lineNumber = lineNumber
         lookForCalledProgram(line)
         this.line = line
-        if (line.substring(6,72).trim().endsWith(".")){
+        int maxLine = (line.size() < 72) ? line.size() : 72
+        if (line.substring(6,maxLine).trim().endsWith(".")){
             endsWithAPeriod = true
         }
 

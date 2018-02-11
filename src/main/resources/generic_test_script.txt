@@ -1,0 +1,66 @@
+source:
+    name:WMS910_PGM.txt
+    location:/Users/jamesmcgill/mutual/cobol/
+    locationType:file
+    copybooks:[/Users/jamesmcgill/mutual/copybooks/, /Users/jamesmcgill/mutual/dqlcopy/]
+end-source.
+
+target:
+    name:TST_PGM.txt
+    location:/Users/jamesmcgill/mutual/cobol/
+    targetType:file
+end-target.
+
+tests:
+paragraph-test:
+    paragraph-name:F90D1
+    testDescription:Sql Call returns row not found
+    input-data:
+        D-BK21-9RPCNT:NUMBER:0
+    end-input-data.
+
+    overlay:
+        overlayType:perform
+        line:PERFORM F95D1 THRU F95D1-EXIT
+        expectedOutput:
+            element:
+                SQLCODE:NUMBER:+100
+            end-element.
+            count-times:YES
+        end-expectedOutput.
+    end-overlay.
+
+    expected-values:
+        D-BK21-9RPCNT:NUMBER:0
+        count-times:NUMBER:1
+    end-expected-values.
+
+end-paragraph-test.
+
+paragraph-test:
+    paragraph-name:F90D1
+    testDescription:Sql Call returns any value but row not found
+    input-data:
+        element:
+            D-BK21-9RPCNT:NUMBER:0
+        end-element.
+    end-input-data.
+
+    overlay:
+        overlayType:perform
+        line:PERFORM F95D1 THRU F95D1-EXIT
+        expectedOutput:
+            element:
+                SQLCODE:NUMBER:+000
+            end-element.
+            count-times:YES
+        end-expectedOutput.
+    end-overlay.
+
+    expected-values:
+        D-BK21-9RPCNT:NUMBER:1
+        count-times:1
+    end-expected-values.
+
+end-paragraph-test.
+end-tests.

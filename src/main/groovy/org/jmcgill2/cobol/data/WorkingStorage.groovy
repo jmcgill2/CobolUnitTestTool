@@ -1,10 +1,11 @@
 package org.jmcgill2.cobol.data
 
+import org.jmcgill2.cobol.services.GenerateCopybooksService
 import org.jmcgill2.cobol.utils.CobolUtils
 
 /**
  * Stores all the Working Storage data elements and generates the metadata necessary to generate a Unit Test version of
- * the Cobol Program.
+ * the Cobol Program Working Storage.
  *
  * Created by jamesmcgill on 5/12/17.
  */
@@ -26,11 +27,13 @@ class WorkingStorage {
 
     }
 
-    public WorkingStorage(ArrayList<String> cobolLines) {
-        findWorkingStorageLines(cobolLines)
+    public WorkingStorage(ProgramElements programElements){
+        findWorkingStorageLines(programElements.programLines)
         cobolUtils.identifySqlLines(workingStorageLines)
-        populateCopybooks()
-        populateDataElements()
+        GenerateCopybooksService generateCopybooksService = new GenerateCopybooksService(workingStorageLines,
+                programElements.copybooks)
+        copybooks = generateCopybooksService.generateCopybooks()
+
     }
 
     public void populateDataElements() {
@@ -44,18 +47,8 @@ class WorkingStorage {
             }
             counter++
 
-
         }
 
-    }
-
-    public void populateCopybooks() {
-        workingStorageLines.eachWithIndex{ CobolLine cl, idx ->
-            if (cl.lineWithoutLineNumber.trim().startsWith("++REPLACE")){
-
-                copybooks << new CobolCopybook(cl.line, workingStorageLines[idx + 1].line, ["/Users/jamesmcgill/dqlcopy/"])
-            }
-        }
     }
 
     public ArrayList<CobolLine> getCobolLines() {
