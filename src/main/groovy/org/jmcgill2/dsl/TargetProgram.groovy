@@ -1,4 +1,4 @@
-package org.jmcgill2.org.jmcgill.testdsl
+package org.jmcgill2.dsl
 
 /**
  * Contains information on where the new test program should be stored and it's name.

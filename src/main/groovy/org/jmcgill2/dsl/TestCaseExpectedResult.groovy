@@ -1,4 +1,4 @@
-package org.jmcgill2.org.jmcgill.testdsl
+package org.jmcgill2.dsl
 
 /**
  *
