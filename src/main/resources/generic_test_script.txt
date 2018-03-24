@@ -11,56 +11,83 @@ target:
     targetType:file
 end-target.
 
-tests:
-paragraph-test:
-    paragraph-name:F90D1
-    testDescription:Sql Call returns row not found
+test-cases:
+test-case:
+    test-name:
+        Test F90D1-1
+    end-test-name.
+
+    paragraph-name:
+        F90D1
+    end-paragraph-name.
+
+    test-description:
+        Sql Call returns row not found
+    end-test-description.
+
     input-data:
         D-BK21-9RPCNT:NUMBER:0
     end-input-data.
 
-    overlay:
-        overlayType:perform
-        line:PERFORM F95D1 THRU F95D1-EXIT
-        expectedOutput:
-            element:
-                SQLCODE:NUMBER:+100
-            end-element.
-            count-times:YES
-        end-expectedOutput.
-    end-overlay.
+    overlays:
+        overlay:
+            overlayType:perform
+            line:PERFORM F95D1 THRU F95D1-EXIT
+            expectedOutput:
+                element:
+                    SQLCODE:NUMBER:+100
+                end-element.
+                count-times:YES
+            end-expectedOutput.
+        end-overlay.
+    end-overlays.
 
     expected-values:
         D-BK21-9RPCNT:NUMBER:0
         count-times:NUMBER:1
     end-expected-values.
 
-end-paragraph-test.
+end-test-case.
 
-paragraph-test:
-    paragraph-name:F90D1
-    testDescription:Sql Call returns any value but row not found
+test-case:
+    test-name:
+        Test F90D1-2
+    end-test-name.
+
+    paragraph-name:
+        F90D1
+    end-paragraph-name.
+
+    test-description:
+        Sql Call returns any value but row not found
+    end-test-description.
+
     input-data:
         element:
             D-BK21-9RPCNT:NUMBER:0
         end-element.
     end-input-data.
 
-    overlay:
+    change-lines:
+    change-line:
         overlayType:perform
         line:PERFORM F95D1 THRU F95D1-EXIT
         expectedOutput:
             element:
                 SQLCODE:NUMBER:+000
             end-element.
-            count-times:YES
+            counter:
+                count-times:YES
+                counts: 1
+            end-counter.
         end-expectedOutput.
-    end-overlay.
+    end-change-line.
+    end-change-lines.
 
     expected-values:
-        D-BK21-9RPCNT:NUMBER:1
-        count-times:1
+        expected-value:
+            D-BK21-9RPCNT:NUMBER:1
+        end-expected-value.
     end-expected-values.
-
-end-paragraph-test.
-end-tests.
+end-test-case.
+end-test-cases.
