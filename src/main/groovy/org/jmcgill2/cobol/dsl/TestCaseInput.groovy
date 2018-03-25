@@ -1,4 +1,4 @@
-package org.jmcgill2.dsl
+package org.jmcgill2.cobol.dsl
 
 /**
  * The data element name and seed value for a test case.

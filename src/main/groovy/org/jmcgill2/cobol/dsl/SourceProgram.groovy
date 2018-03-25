@@ -1,7 +1,4 @@
-package org.jmcgill2.dsl
-
-import javax.xml.transform.Source
-
+package org.jmcgill2.cobol.dsl
 /**
  * Stores information about the Cobol Program to use for the tests.
  */

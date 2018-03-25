@@ -1,4 +1,4 @@
-package org.jmcgill2.dsl
+package org.jmcgill2.cobol.dsl
 
 /**
  * Contains information on where the new test program should be stored and it's name.
