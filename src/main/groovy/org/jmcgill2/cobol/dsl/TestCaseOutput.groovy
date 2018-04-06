@@ -1,14 +1,6 @@
 package org.jmcgill2.cobol.dsl
 
-import groovy.transform.ToString
-import groovy.util.logging.Slf4j
-
-/**
- * The data element name and seed value for a test case.
- */
-@ToString
-@Slf4j
-class TestCaseInput {
+class TestCaseOutput {
 
     /**
      * The data element name.
@@ -30,17 +22,19 @@ class TestCaseInput {
      * element value third.
      * @param input     String containing element name, element type and element value with each value separated by a colon (:).
      */
-    public TestCaseInput(String input){
+    public TestCaseOutput(String input){
         def toks = input.tokenize(":")
         elementName = toks[0]
         elementType = toks[1]
         elementValue = toks[2]
     }
 
-    public TestCaseInput(String elementName, String elementType, String value){
+    public TestCaseOutput(String elementName, String elementType, String value){
         this.elementName = elementName
         this.elementType = elementType
         this.elementValue = value
     }
+
+
 
 }

@@ -47,8 +47,10 @@ class CobolUtils {
     public isComment(String line){
 
         boolean isComment = false
-        if (line.substring(Constants.commentIndLocation).startsWith("*")){
-            isComment = true
+        if (line != null && line.size() >= Constants.commentIndLocation) {
+            if (line.substring(Constants.commentIndLocation).startsWith("*")) {
+                isComment = true
+            }
         }
 
         return isComment
@@ -57,8 +59,10 @@ class CobolUtils {
     public isColumnA(String line){
         boolean isColumnA = false
 
-        if (!isComment(line) && line.substring(7, 10).trim() != ""){
-            isColumnA = true
+        if (line != null && line.size() >= 10) {
+            if (!isComment(line) && line.substring(7, 10).trim() != "") {
+                isColumnA = true
+            }
         }
 
         return isColumnA

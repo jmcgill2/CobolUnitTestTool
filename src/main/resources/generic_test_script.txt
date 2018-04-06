@@ -26,19 +26,30 @@ test-case:
     end-test-description.
 
     input-data:
-        D-BK21-9RPCNT:NUMBER:0
+        element:
+            D-BK21-9RPCNT:NUMBER:0
+        end-element.
+        element:
+            D-BK21-9TPCNT:NUMBER:0
+        end-element.
     end-input-data.
 
     overlays:
         overlay:
-            overlayType:perform
-            line:PERFORM F95D1 THRU F95D1-EXIT
-            expectedOutput:
+            overlay-type:
+                perform
+            end-overlay-type.
+            line:
+                PERFORM F95D1 THRU F95D1-EXIT
+            end-line.
+            expected-output:
                 element:
                     SQLCODE:NUMBER:+100
                 end-element.
-                count-times:YES
-            end-expectedOutput.
+                count-times:
+                    YES
+                end-count-times.
+            end-expected-output.
         end-overlay.
     end-overlays.
 
@@ -70,8 +81,12 @@ test-case:
 
     change-lines:
     change-line:
-        overlayType:perform
-        line:PERFORM F95D1 THRU F95D1-EXIT
+        overlay-type:
+            perform
+        end-overlay-type.
+        line:
+            PERFORM F95D1 THRU F95D1-EXIT
+        end-line.
         expectedOutput:
             element:
                 SQLCODE:NUMBER:+000

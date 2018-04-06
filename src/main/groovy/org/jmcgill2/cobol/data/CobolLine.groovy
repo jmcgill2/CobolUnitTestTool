@@ -27,6 +27,10 @@ class CobolLine {
 
     CobolUtils cobolUtils = new CobolUtils()
 
+    public CobolLine() {
+
+    }
+
     public CobolLine(String line, int lineNumber) {
         this.isComment = cobolUtils.isComment(line)
         this.isColumnA = this.cobolUtils.isColumnA(line)

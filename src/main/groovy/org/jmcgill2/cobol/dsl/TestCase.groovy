@@ -1,5 +1,8 @@
 package org.jmcgill2.cobol.dsl
 
+import groovy.util.logging.Slf4j
+
+@Slf4j
 class TestCase {
 
     /**
@@ -62,18 +65,77 @@ class TestCase {
      */
     public TestCase(String sourceText){
         this.sourceText = sourceText
-        println "Test case = $sourceText"
         setTestName()
         setTestDescription()
+        setParagraphName()
+        setDataInputs()
     }
 
     /**
-     * Generate test description from the information provided by the test script.
+     * Pulls the input data from the sourceText and processes it.
+     */
+    public void setDataInputs() {
+        String line = sourceText.substring(sourceText.indexOf("input-data:"), sourceText.indexOf("end-input-data."))
+        line = line - "end-input-data."
+        line = line - "input-data:"
+        line = line.trim()
+        setDataInputs(line)
+    }
+
+    /**
+     * Extracts the information needed from the string to generate one or more data element inputs
+     * @param elementInputs String containing one or more element inputs for the test
+     */
+    public void setDataInputs(String elementInputs) {
+        log.info("elementInputs = $elementInputs")
+        String elements = elementInputs
+        boolean moreElementsExist = true
+        while(moreElementsExist){
+//            println "elements = $elements"
+            if (elements.indexOf("element:") < 0){
+                moreElementsExist = false
+            }else {
+                String element = elements.substring(elements.indexOf("element:"), elements.indexOf("end-element."))
+                element = element - "element:"
+                element = element - "end-element."
+                log.info("element = $element")
+                inputs << new TestCaseInput(element)
+                def idx = elements.indexOf("end-element.")
+                if (idx > 0) {
+                    println "elements = $elements"
+                    elements = elements.substring(idx + 12)
+                }
+            }
+        }
+    }
+
+    /**
+     * Pulls paragraph information from the sourceText and processes it.
+     */
+    public void setParagraphName(){
+        String line = sourceText.substring(sourceText.indexOf("paragraph-name:"), sourceText.indexOf("end-paragraph-name."))
+        line = line - "paragraph-name:"
+        line = line - "end-paragraph-name."
+        line = line.trim()
+        setParagraphName(line)
+    }
+
+    /**
+     * Sets paragraph name
+     * @param paragraphName String containing paragraph name.
+     */
+    public void setParagraphName(String paragraphName){
+        this.paragraphName = paragraphName
+    }
+
+    /**
+     * Generate test description from the information provided by the sourceText.
      */
     public void setTestDescription() {
         String line = sourceText.substring(sourceText.indexOf("test-description:"), sourceText.indexOf("end-test-description."))
         line = line - "test-description:"
         line = line - "end-test-description.".trim()
+        line = line.trim()
         setTestDescription(line)
     }
 
@@ -87,7 +149,8 @@ class TestCase {
     public void setTestName(){
         String line = sourceText.substring(sourceText.indexOf("test-name:"), sourceText.indexOf("end-test-name."))
         line = line - "test-name:"
-        line = line - "end-test-name.".trim()
+        line = line - "end-test-name."
+        line = line.trim()
         setTestName(line)
     }
 
@@ -100,6 +163,10 @@ class TestCase {
         str += "\tTest Name:  ${testName}\n"
         str += "\tTest Description: ${testDescription}\n"
         str += "\tParagraph: ${paragraphName}\n"
+        str += "\tInputs:\n"
+        inputs.each{
+            str += "\t\t${it}"
+        }
         return str
     }
 

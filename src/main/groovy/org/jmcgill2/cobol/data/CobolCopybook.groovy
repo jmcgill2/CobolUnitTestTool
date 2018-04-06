@@ -70,6 +70,11 @@ class CobolCopybook {
         }
     }
 
+    public void setCobolLines(ArrayList<String>lines){
+        this.cobolLines = []
+        populateCopybookLines(lines)
+    }
+
     /**
      * Prints the contents of the Copybook the way it would be incorporated into the program.
      */
