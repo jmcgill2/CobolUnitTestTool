@@ -3,7 +3,8 @@ package org.jmcgill2.cobol.dsl
 import spock.lang.Specification
 
 class TestCaseTest extends Specification {
-    def "SetDataInputs using sourceText"() {
+    
+    def "SetTestCaseInputs using sourceText"() {
 
         TestCase tc = new TestCase()
         tc.sourceText = """input-data:
@@ -15,13 +16,13 @@ class TestCaseTest extends Specification {
                             end-element.
                         end-input-data."""
         when:
-        tc.setDataInputs()
+        tc.setTestCaseInputs()
 
         then:
             tc.inputs.size() > 0
     }
 
-    def "SetDataInputs with a single input"() {
+    def "SetTestCaseInputs with a single input"() {
         TestCase tc = new TestCase()
 
         String inputData = """input-data:
@@ -31,12 +32,12 @@ class TestCaseTest extends Specification {
                         end-input-data."""
 
         when:
-            tc.setDataInputs(inputData)
+            tc.setTestCaseInputs(inputData)
         then:
            tc.inputs.size() == 1
     }
 
-    def "SetDataInputs with multiple inputs"() {
+    def "SetTestCaseInputs with multiple inputs"() {
 
         TestCase tc = new TestCase()
 
@@ -50,12 +51,12 @@ class TestCaseTest extends Specification {
                         end-input-data."""
 
         when:
-        tc.setDataInputs(inputData)
+        tc.setTestCaseInputs(inputData)
         then:
         tc.inputs.size() == 2
     }
 
-    def "SetDataInputs error due to badly formed request"() {
+    def "SetTestCaseInputs error due to badly formed request"() {
         TestCase tc = new TestCase()
 
         String inputData = """input-data:
@@ -67,7 +68,7 @@ class TestCaseTest extends Specification {
 
         when:
             try {
-                tc.setDataInputs(inputData)
+                tc.setTestCaseInputs(inputData)
             }catch(Exception e){
                 error = true
             }
