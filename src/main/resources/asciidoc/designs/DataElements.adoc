@@ -1,0 +1,5 @@
+= Data Elements and the Data Model
+
+== Introduction
+
+This document sets out the notes and thoughts on the data model and handling the data elements.
