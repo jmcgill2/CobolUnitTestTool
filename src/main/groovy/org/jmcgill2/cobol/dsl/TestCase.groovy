@@ -1,6 +1,7 @@
 package org.jmcgill2.cobol.dsl
 
 import groovy.util.logging.Slf4j
+import org.jmcgill2.cobol.utils.Constants
 
 @Slf4j
 class TestCase {
@@ -33,7 +34,7 @@ class TestCase {
     /**
      * The date elements we expect to change and the results we expect to have.
      */
-    ArrayList<TestCaseExpectedResult> results = []
+    ArrayList<TestCaseOutput> results = []
 
     /**
      * The changes we need to make to the paragraph to be able to test it in isolation.
@@ -54,7 +55,7 @@ class TestCase {
     /**
      * Used for testing.
      */
-    public TestCase() {
+    TestCase() {
 
     }
 
@@ -63,30 +64,67 @@ class TestCase {
      *
      * @param sourceText    String containing the test case information from the test script.
      */
-    public TestCase(String sourceText){
+    TestCase(String sourceText){
         this.sourceText = sourceText
         setTestName()
         setTestDescription()
         setParagraphName()
-        setDataInputs()
+        setTestCaseInputs()
+        setTestCaseResults()
+    }
+
+    /**
+     * Pulls the expected results data from the sourceText and processes it.
+     */
+    void setTestCaseResults() {
+        String line = sourceText.substring(sourceText.indexOf(Constants.EXPECTED_OUTPUTS), sourceText.indexOf(Constants.END_EXPECTED_OUTPUTS))
+        line = line - Constants.EXPECTED_OUTPUTS
+        line = line - Constants.END_EXPECTED_OUTPUTS
+        line = line.trim()
+        setTestCaseResults(line)
+    }
+
+    /**
+     * Extracst the information needed from the string to generate one or more expected results.
+     * @param expectedResults   String containing one or more expected results for the test case.
+     */
+    void setTestCaseResults(String expectedResults){
+        String outputs = expectedResults
+        boolean moreExpectedResultsExist = true
+
+        while(moreExpectedResultsExist){
+            if (outputs.indexOf(Constants.EXPECTED_OUTPUT) < 0){
+                moreExpectedResultsExist = false
+            }else {
+                String output = outputs.substring(outputs.indexOf(Constants.EXPECTED_OUTPUT), outputs.indexOf(Constants.END_EXPECTED_OUTPUT))
+                output = output - Constants.EXPECTED_OUTPUT
+                output = output - Constants.END_EXPECTED_OUTPUT
+                output = output.trim()
+                results << new TestCaseOutput(output)
+                def idx = outputs.indexOf(Constants.END_EXPECTED_OUTPUT)
+                if (idx > 0){
+                    outputs = outputs.substring(idx + Constants.END_EXPECTED_OUTPUT.size())
+                }
+            }
+        }
     }
 
     /**
      * Pulls the input data from the sourceText and processes it.
      */
-    public void setDataInputs() {
+    public void setTestCaseInputs() {
         String line = sourceText.substring(sourceText.indexOf("input-data:"), sourceText.indexOf("end-input-data."))
         line = line - "end-input-data."
         line = line - "input-data:"
         line = line.trim()
-        setDataInputs(line)
+        setTestCaseInputs(line)
     }
 
     /**
      * Extracts the information needed from the string to generate one or more data element inputs
-     * @param elementInputs String containing one or more element inputs for the test
+     * @param elementInputs String containing one or more element inputs for the test case.
      */
-    public void setDataInputs(String elementInputs) {
+    public void setTestCaseInputs(String elementInputs) {
         log.info("elementInputs = $elementInputs")
         String elements = elementInputs
         boolean moreElementsExist = true
@@ -102,7 +140,6 @@ class TestCase {
                 inputs << new TestCaseInput(element)
                 def idx = elements.indexOf("end-element.")
                 if (idx > 0) {
-                    println "elements = $elements"
                     elements = elements.substring(idx + 12)
                 }
             }
