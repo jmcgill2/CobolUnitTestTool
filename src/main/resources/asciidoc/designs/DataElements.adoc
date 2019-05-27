@@ -3,3 +3,21 @@
 == Introduction
 
 This document sets out the notes and thoughts on the data model and handling the data elements.
+
+== Challenges
+When trying to generate a test harness that can be applied to any cobol program there are several challenges regarding
+the data models that are used.  These include:
+
+* The use of redefines which can make it difficult to identify the correct values to populate, check for or initialize.
+* Certain data types such as Comp and Comp-3 that pose potential problems with calculating the proper size of a data element
+or larger data group and which make it difficult to code in groovy or store outside the mainframe hard-coded values as inputs.
+* The size of the inputs vs. the size of the valid area of a cobol program.  To duplicate a read of a row into a 1000 byte/char
+variable programatically requires additional thought and can't just be a copy of a row out of a file and a frew tweaks.
+* The difficulty properly initializing groups with FILLER variables because those don't get initialized.
+
+== New Data Elements
+In addtion to properly handling the existing data elements we will need new data elements to do the following:
+
+* Store test results
+* Provide hard coded test inputs
+* Counters for any tests that try to quantify the number of times a paragraph is called
