@@ -55,7 +55,11 @@ class Constants {
 
     public static final String END_OVERLAY = "end-overlay."
 
-    public static final EXPECTED_OUTPUT = "expected-output:"
+    public static final EXPECTED_OUTPUTS = "expected-values:"
 
-    public static final END_EXPECTED_OUTPUT = "end-expected-output."
+    public static final END_EXPECTED_OUTPUTS = "end-expected-values."
+
+    public static final EXPECTED_OUTPUT = "expected-value:"
+
+    public static final END_EXPECTED_OUTPUT = "end-expected-value."
 }
