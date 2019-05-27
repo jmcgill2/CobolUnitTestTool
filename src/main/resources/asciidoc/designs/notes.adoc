@@ -1,6 +1,36 @@
 = Notes
 
-=== Negative Testing
+== Convention Over Configuration
+
+Ideally, we want the user to have the flexibility they want to customize as much as possible but the freedom to let the
+tool do the hard work if they don't want to.
+
+.Conventions and Customizations
+|===
+|Activity|Convention|Customizations
+
+|Initializtion
+|Always Initialize Everything
+|Initialize Nothing; Only initialize specific things; Only exclude specific things from initialization
+
+|Negative Testing
+|Always Perform Negative Testing on Everything
+|Never perform negative testing; Only perform negative testing sometimes; only perform negative testing on some variables
+
+|In Paragraph Perform Statements
+|Stub out and verify the perform has been called
+|Include the entire paragraph and perform it; stub out specific activity that occurs when it is called
+
+|Database Calls
+|Stub out and verify the database call was made once
+|Customize the call by populating the expected output or error return
+
+|File Reads
+|Stub out and verify the read was made
+|Customize the read statement by populating the expected inputs to test
+|===
+
+== Negative Testing
 
 If we generate a map of each data element and give it a unique number, we can generate a negative testing indicator for
 every data element.  Then, with each test, we can do negative test validation on every element except those we have
@@ -11,7 +41,7 @@ Negative validation should not be done on
 * values that redefined values we expected to change (or were part of a group level redefines and we did not want to
 take a chance).
 
-This negative testing paragraph will be large.  is there such a think as too large?  For example, if we have 500 variables
+This negative testing paragraph will be large.  is there such a thing as too large?  For example, if we have 500 variables
 we will be making 500 variable checks.
 
 We may not need to check group variables (or will we to check filler?) so that could limit.  Or perhaps we can use group
@@ -46,6 +76,25 @@ We may discover this approach does not work in all cases.
 For redefines we may have a problem.  We will initialize the group level that is redefined only to start with and see
 where that gets us.
 
+=== Knowing What to Initialize and What to Ignore
+
+We may need the ability to ignore certain fields when we initialize because they are part of a redefines and one redefine
+is being used to drive the initialization or because the hard coded values should not be modified (e.g. a table of months).
+
+We may need indicators that we set for each variable (how big would this get?) to determine if they should be
+checked.  We should Y and N indicators and be able to Universally set them and then tweak individual ones.
+
+We will have two levels at which they could be set:
+
+. The test suite level (all tests)
+. The individual test level
+
+We will have to decide whether the individual test level has priority over the test suite level (I'm leaning toward
+this approach).
+
+Additionally, we will have to figure out how to set the indicators properly for initialization and negative testing
+(See Negative Testing).
+
 == Mocking
 
 === Mocking Paragraphs
@@ -54,7 +103,12 @@ We will mock the following Paragraphs:
 
 . Paragraphs that call other programs
 . Paragraphs that execute SQL
-. aragraphs that read and write to files
+. Paragraphs that read and write to files
+
+Mocking these paragraphs could involve the following:
+
+* Hard coding values that mimic the results of a call to a program or database or the reading of a file.
+* Counting the number of times a paragraph has been called
 
 === Mocking Parts of Paragraphs
 
@@ -63,7 +117,7 @@ We will mock the following lines in a paragraph we will otherwise keep whole and
 .  Calls to other programs
 .  Read statements
 .  Write statements
-.  Exe SQL statements
+.  Exec SQL statements
 
 === Mocking Calls to a Program
 
