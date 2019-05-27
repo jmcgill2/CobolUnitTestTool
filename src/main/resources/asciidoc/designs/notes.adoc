@@ -142,10 +142,30 @@ to track which one we are on with a working storage value and populated with a m
 .  Initalize
 .  Set input values
 .  Set any testing variables to the right values
-.. Set any test vales for calls, reads, writes or sql statements
+.. Set any test values for calls, reads, writes or sql statements
 .. Set the ignore settings to avoid negative checks on either the values we expect to change or redefines of
         those values.
 .  Run the Paragraph
 .  Validate the results
 ..   Check the expected results
 ..   Validate negative checks
+. Report the results
+
+== Test Descriptions
+
+There should be a test name, a short description and a long description.  Only the test name should be required.
+
+The report out should have the test name and the short description if it exists along with the results of the test.
+
+== Code Coverage
+
+Code coverage would be possible but clunky.  The one way to do it that I can think of is to track the original code,
+map any code from the test program that came from the original code back to the original code, execute with code coverage
+turned on in Xpeditor, read the code coverage output and pull out the lines that were executed from the test program,
+use the map to identify from that what executed lines came from the original program and report out on that.
+
+This will still be an approximation.
+
+User should be able to decide whether stubbed out lines (or which stubbed out lines) will be counted for the purposes
+of code coverage and which will not.  For example, a call to a paragraph may be considered executed even if you mock
+the results of the call but a call to another program or to read a file might not count for purposes of code coverage.
