@@ -10,7 +10,7 @@ import org.jmcgill2.cobol.utils.CobolUtils
 @Slf4j
 class DataElement {
 
-    public enum DataElementLocation{
+    enum DataElementLocation{
         FILE_SECTION,
         WORKING_STORAGE,
         LINKAGE_SECTION
@@ -52,6 +52,11 @@ class DataElement {
      * True if the data element has a predefined value.
      */
     boolean hasPredefinedValue = false
+
+    /**
+     * Stores the predefined value
+     */
+    String predefinedValue
 
     /**
      * True if the data element has a blank when zero setting.
@@ -97,6 +102,11 @@ class DataElement {
     String dataElementLevel
 
     /**
+     * Size of the data element.  If the element is a group element it will be the
+     */
+    int dataElementSize
+
+    /**
      * The Pic clause of the data element.  If none exists, as in the case of a group element, the value is null.
      */
     String dataElementPicClause
@@ -136,7 +146,7 @@ class DataElement {
      */
     CobolUtils cobolUtils = new CobolUtils()
 
-    public DataElement() {
+    DataElement() {
 
     }
 
@@ -146,7 +156,7 @@ class DataElement {
      * @param cobolLines    List of CobolLine objects
      * @param cobolLineNum  Location in the List of CobolLine objects that begins the data element information.
      */
-    public DataElement(ArrayList<CobolLine> cobolLines, int cobolLineNum ){
+    DataElement(ArrayList<CobolLine> cobolLines, int cobolLineNum ){
 
         dataElementLine = generateDataElement(cobolLines, cobolLineNum)
 
@@ -169,8 +179,8 @@ class DataElement {
 
     }
 
-    public String identifyValueIfAny() {
-        String val
+    String identifyValueIfAny() {
+        String val = ""
 
         if (dataElementLine.contains (" VALUE ")){
              String tmp = dataElementLine.substring(dataElementLine.indexOf(" VALUE ") + 7)
@@ -194,8 +204,8 @@ class DataElement {
         return val
     }
 
-    public String generatePicClause() {
-        String picClause
+    String generatePicClause() {
+        String picClause = ""
 
         if (dataElementLine.contains(" PIC ")){
             if (dataElementLine.contains(" VALUE ")){
@@ -224,7 +234,7 @@ class DataElement {
      * Extracts redefined data element from dataElementLine.
      * @return  String containing the name of the data element redefined by this data element.
      */
-    public String determineRedefinedElementName(){
+    String determineRedefinedElementName(){
 
         return determineRedefinedElementName(dataElementLine)
     }
@@ -234,7 +244,7 @@ class DataElement {
      * @param line  String containing data element information.
      * @return  String containing the name of the data element redefined by this data element.
      */
-    public String determineRedefinedElementName(String line){
+    String determineRedefinedElementName(String line){
 
         String tmpLine = line.substring(dataElementLine.indexOf("REDEFINES "))
         def toks = tmpLine.tokenize(" ")
@@ -250,7 +260,7 @@ class DataElement {
      * Returns true if the dataElementLevel is 01 or 77 and false otherwise.
      * @return true if the dataElementLevel is 01 or 77 and false otherwise.
      */
-    public boolean determineTopLevelElement() {
+    boolean determineTopLevelElement() {
         return determineTopLevelElement(dataElementLevel)
     }
 
@@ -259,15 +269,15 @@ class DataElement {
      * @param level String containing a level indicator for a data element.
      * @return  true if the level is 01 or 77 and false otherwise.
      */
-    public boolean determineTopLevelElement(String level){
-        return (dataElementLevel == '01' || dataElementLevel == "77") ? true : false
+    boolean determineTopLevelElement(String level){
+        return (dataElementLevel == '01' || dataElementLevel == "77")
     }
 
     /**
      * Returns true if the dataElementLine contains a group level element and false otherwise.
      * @return  true if the dataElementLine contains a group level element and false otherwise.
      */
-    public boolean determineGroupElement(){
+    boolean determineGroupElement(){
         return determineGroupElement(dataElementLine)
     }
 
@@ -276,7 +286,7 @@ class DataElement {
      * @param line  String containing data element information.
      * @return  true if the data element is a group level data element and false otherwise.
      */
-    public boolean determineGroupElement(String line){
+    boolean determineGroupElement(String line){
 
         boolean bool
 
@@ -358,7 +368,7 @@ class DataElement {
         return name
     }
 
-    public String toString(){
+    String toString(){
         return dataElementLine
     }
 
