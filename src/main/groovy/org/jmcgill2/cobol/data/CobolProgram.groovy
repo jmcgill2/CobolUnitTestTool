@@ -16,6 +16,8 @@ class CobolProgram {
 
     String programName
 
+    IdentificationDivision identificationDivision
+
     WorkingStorage workingStorage
 
     ProcedureDivision procedureDivision
@@ -26,21 +28,23 @@ class CobolProgram {
 
 
 
-    public CobolProgram() {
+    CobolProgram() {
 
     }
 
-    public CobolProgram(File f){
+    CobolProgram(File f){
 
         cobolLines = cobolUtils.readCobolFile(f)
 
-        workingStorage = new WorkingStorage(cobolLines)
+        ProgramElements programElements = new ProgramElements(cobolLines)
+
+        workingStorage = new WorkingStorage(programElements)
 
         procedureDivision = new ProcedureDivision(cobolLines)
 
     }
 
-    public CobolProgram(ProgramElements programElements){
+    CobolProgram(ProgramElements programElements){
         this.programName = programElements.programName
         this.cobolLines = programElements.programLines
         this.workingStorage = new WorkingStorage(programElements)
@@ -48,7 +52,7 @@ class CobolProgram {
 
     }
 
-    public ArrayList<String> getWorkingStorageLines() {
+    ArrayList<CobolLine> getWorkingStorageLines() {
         return workingStorage.workingStorageLines
     }
 
