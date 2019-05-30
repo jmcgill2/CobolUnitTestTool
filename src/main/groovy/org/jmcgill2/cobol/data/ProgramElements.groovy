@@ -8,12 +8,21 @@ class ProgramElements {
 
     Map<String, ArrayList<String>> copybooks = [:]
 
-    public ProgramElements() {
+    ProgramElements() {
 
     }
 
-    public ProgramElements(String programName){
+    ProgramElements(String programName){
         this.programName = programName
+    }
+
+    ProgramElements(ArrayList<String> programLines){
+        this.programLines = programLines
+    }
+
+    ProgramElements(String programName, ArrayList<String>programLines){
+        this.programName = programName
+        this.programLines = programLines
     }
 
 }
