@@ -9,7 +9,7 @@ import org.jmcgill2.cobol.utils.CobolUtils
  *
  * Created by jamesmcgill on 5/12/17.
  */
-class WorkingStorage {
+class WorkingStorageSection {
 
     ArrayList<DataElement> dataElements = []
 
@@ -23,11 +23,11 @@ class WorkingStorage {
 
     int endOfWorkingStorage
 
-    public WorkingStorage() {
+    public WorkingStorageSection() {
 
     }
 
-    public WorkingStorage(ProgramElements programElements){
+    public WorkingStorageSection(ProgramElements programElements){
         findWorkingStorageLines(programElements.programLines)
         cobolUtils.identifySqlLines(workingStorageLines)
         GenerateCopybooksService generateCopybooksService = new GenerateCopybooksService(workingStorageLines,
