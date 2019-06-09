@@ -1,6 +1,6 @@
 package org.jmcgill2.cobol.data
 
-import org.jmcgill2.cobol.ProcessCopybooks
+
 import org.jmcgill2.cobol.utils.CobolUtils
 
 /**
@@ -14,41 +14,57 @@ import org.jmcgill2.cobol.utils.CobolUtils
  */
 class CobolProgram {
 
+    /**
+     * The Cobol Program Name
+     */
     String programName
 
+    /**
+     * The contents of the Identification Division
+     */
     IdentificationDivision identificationDivision
 
-    WorkingStorage workingStorage
+    /**
+     * The contents of the Environment Division
+     */
+    EnvironmentDivision environmentalDivision
 
+    /**
+     * The contents of the Procedure Division.
+     */
     ProcedureDivision procedureDivision
 
-    ArrayList<String> cobolLines
+    /**
+     * The Cobol Program lines
+     */
+    ArrayList<String> fileLines
+
+    ArrayList<CobolCopybook> copybooks = []
+
+    Map<Integer, String> programLines
 
     CobolUtils cobolUtils = new CobolUtils()
 
+    ArrayList<CobolLine> cobolLines
 
 
     CobolProgram() {
 
     }
 
-    CobolProgram(File f){
+    CobolProgram(File f, ArrayList<String>copybookLocations){
 
-        cobolLines = cobolUtils.readCobolFile(f)
+        fileLines = cobolUtils.readCobolFile(f)
 
-        ProgramElements programElements = new ProgramElements(cobolLines)
+        fileLines.eachWithIndex{line, index ->
+            programLines.put(index, line)
+        }
 
-        workingStorage = new WorkingStorage(programElements)
+        copybooks = cobolUtils.readCopybooks(copybookLocations, programLines)
+
+        workingStorage = new WorkingStorageSection(programElements)
 
         procedureDivision = new ProcedureDivision(cobolLines)
-
-    }
-
-    CobolProgram(ProgramElements programElements){
-        this.programName = programElements.programName
-        this.cobolLines = programElements.programLines
-        this.workingStorage = new WorkingStorage(programElements)
-        this.procedureDivision = new ProcedureDivision(cobolLines)
 
     }
 
