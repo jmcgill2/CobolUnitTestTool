@@ -1,9 +1,6 @@
 package org.jmcgill2.cobol.utils
 
 import org.jmcgill2.cobol.data.CobolLine
-import org.jmcgill2.cobol.data.WorkingStorage
-
-import org.jmcgill2.cobol.utils.Constants
 
 /**
  * Created by jamesmcgill on 5/12/17.
