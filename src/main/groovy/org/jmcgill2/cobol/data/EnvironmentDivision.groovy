@@ -7,7 +7,7 @@ import groovy.util.logging.Slf4j
  * This includes the Configuration Section and the Input-Output Section.
  */
 @Slf4j
-class EnvironmentalDivision {
+class EnvironmentDivision {
 
     ConfigurationSection configurationSection
 }

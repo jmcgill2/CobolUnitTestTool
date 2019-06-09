@@ -169,3 +169,19 @@ This will still be an approximation.
 User should be able to decide whether stubbed out lines (or which stubbed out lines) will be counted for the purposes
 of code coverage and which will not.  For example, a call to a paragraph may be considered executed even if you mock
 the results of the call but a call to another program or to read a file might not count for purposes of code coverage.
+
+== Reporting Results
+
+Report results should be easily swapped out and highly configurable to enable someone to write to a file, database, etc.
+
+Also configurable should be the output format (JSON, XML) and where the output will go (e.g. SonarQube).
+
+=== Report Format
+The report format should allow the user to identify the:
+
+* Program
+* Paragraph
+* Test Name
+* Short Description
+* Test Result
+* Error Details (if test did not pass)
