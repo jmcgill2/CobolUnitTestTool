@@ -14,13 +14,23 @@ class CobolCopybook {
      * The value, if any, that will be used when the copybook is instantiated in place of the value in the copybook.
      * This is done to allow multiple versions of the same copybook to be used in the same program.
      */
-    String replaceValue
+    String replacePrefix
 
     /**
      * The value in the copybook that will be replaced.  Usually, this is a value like :NUL: that is designed to be
      * replaced.
      */
-    String originalValue
+    String originalPrefix
+
+    /**
+     * The line in the cobol program where this copybook is used.
+     */
+    int programLineNumber
+
+    /**
+     * The Division or section, whichever is more precise, of the cobol program where the copybook is located.
+     */
+    String programLocation
 
     /**
      * The name of the copybook.
@@ -46,13 +56,13 @@ class CobolCopybook {
      * @param copybookName      String containing the Copybook name.
      * @param copybookLines     Array of Strings containing all the Copybook values.
      */
-    public CobolCopybook(String originalPrefix, String newPrefix, String copybookName, ArrayList<String> copybookLines ) {
+    public CobolCopybook(String originalPrefix, String replacePrefix, String copybookName, ArrayList<String> copybookLines ) {
 
         this.copybookName = copybookName
 
-        originalValue = originalPrefix
+        this.originalPrefix = originalPrefix
 
-        replaceValue = newPrefix
+        this.replacePrefix = replacePrefix
 
         populateCopybookLines(copybookLines)
     }
@@ -65,7 +75,9 @@ class CobolCopybook {
     private void populateCopybookLines(ArrayList<String> lines) {
 
         lines.eachWithIndex{ String entry, int i ->
-            entry = entry.replaceAll(originalValue, replaceValue)
+            if (originalPrefix != null) {
+                entry = entry.replaceAll(originalPrefix, replacePrefix)
+            }
             cobolLines << new CobolLine(entry, i)
         }
     }
