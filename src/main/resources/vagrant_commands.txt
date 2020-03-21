@@ -1,0 +1,5 @@
+vagrant up to start a vagrant machine.
+vagrant ssh connects you to the machine
+vagrant halt shuts down the machine without resetting it.
+vagrant destroy destroys the machine.  When vagrant up is run again the machine is started from scratch.
+vagrant init creates an initial vagrantfile if one does not exist.
