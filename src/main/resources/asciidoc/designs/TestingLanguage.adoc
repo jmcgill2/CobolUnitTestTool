@@ -1,11 +1,11 @@
 :toc:
-= CUTT DSL
+= Cobol Unit Test Tool DSL
 
 == Introduction
 
 The Cobol Unit Test Tool Domain Specific Language is designed to allow users to
 easily generate Unit Tests at the paragraph level.  Its goal is to minimize the amount
-of documentation the user is required to generate and maintain.
+of documentation the user is required to generate and maintain a test script.
 
 == Program Level Fields
 
