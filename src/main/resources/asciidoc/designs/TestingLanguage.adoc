@@ -17,7 +17,7 @@ The name of the Cobol Program that you are creating tests for.
 
 === program-location
 
-The PDS or Librarian directory containing the program.
+The location of the program to be tested.  TOODO - determine if this will require additional fields around connectivity.
 
 ==== copybook-location
 
@@ -26,7 +26,7 @@ The location or locations (comma separated) to get the copybooks from.
 === test-program-name
 
 The Cobol Program name for the new test program that will be generated.  Cobol Program names can only
-be 8 characters or less.
+be 8 characters or less in many cases.
 
 === test-program-description
 
@@ -34,11 +34,20 @@ A description of the test program.
 
 === test-program-location
 
-The PDS or Librarian location the test program will be stored.
+The location the test program will be stored.
 
 === test-jcl-location
 
-The PDS or Librarian location the test JCL will be stored.
+The location that any associated jcl to compile/execute the test program will be stored.
+
+=== test-results-name
+
+The Name of the test-results output.  If this is a file it would be the name of a file.  If this was a database, it
+would be the name of the database and table.  TODO - may need credentials for database too.
+
+=== report-location
+
+The location the test results can be found when testing is complete.
 
 == Paragraph Level Fields
 
@@ -50,7 +59,7 @@ The following fields are available to create Unit test cases.
 |Field | Required | Description
 |*test-start*|Yes|Required to indicate the start of new test.
 |*paragraph-name* | Yes | Original paragraph in the Cobol Program.
-|*test-description |
+|*test-description | No | Description of the test
 |*test-end* |Yes | Required to indicate the end of a test.
 |
 ===|
