@@ -1,0 +1,38 @@
+= Test Script Specification
+
+== Purpose
+This document outlines the requirements for any test script domain specific language.  It identifies the information
+that must be documented.
+
+== Program Level Information
+
+=== Acess Information
+Depending on where the cobol programs and copybooks are located, the test script must contain enough information for
+the application to access and read these files.  This is complicated by the need to potentially encrypt this information
+because these credentials should not be stored in the script in clear text.
+
+The same is true for access to the location where outputs would be written out.
+
+=== Program Information
+The test script would have to include the following: +
+
+*  The program name and location
+*  The copybook location(s)
+* The Location for the output test program
+* The location for the output test script/JCL
+
+=== Report Information
+The test results will need to be stored so they can be reported.  The types of storage and the particulars of the
+storage information.  The two obvious ways to store results are in files or databases.
+
+* File Information
+
+** File Name
+** File Layout
+** File Format (Not the entire format but some reference to the format to use)
+
+* Database Information
+** Database Name
+** Database Access Information
+** Format Information (Not the entire format but some reference to the format to use)
+
