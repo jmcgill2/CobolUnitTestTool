@@ -34,13 +34,17 @@ A description of the test program.
 
 === test-program-location
 
-The PDS or Librarian location the test program will be stored.
+The location the test program will be stored.
 
-=== test-jcl-location
+=== test-jcl-location (if applicable)
 
-The PDS or Librarian location the test JCL will be stored.
+The location the test JCL will be stored.
 
-== Paragraph Level Fields
+=== Credentials (if necessary)
+
+The credentials necessary to access the cobol program and copybooks and write out the test program and jcl to the appropriate location.
+
+== Test Case Fields
 
 The following fields are available to create Unit test cases.
 
@@ -50,8 +54,21 @@ The following fields are available to create Unit test cases.
 |Field | Required | Description
 |*test-start*|Yes|Required to indicate the start of new test.
 |*paragraph-name* | Yes | Original paragraph in the Cobol Program.
-|*test-description |
+|*test-description* | Yes | Description of the test.
+|*test-inputs* | No | List of test inputs (see data-element below)
+|*test-outputs* | No | List of test outputs (see data-element below)
+|*negative-test*|No | Yes for perform negative tests for all elements that should not be modified and No otherwise.  Yes is the default.
+|*mocks*| No |List mock activities that may mimic program behavior (see mock below)
 |*test-end* |Yes | Required to indicate the end of a test.
+|
+===|
+
+== Data Elements
+
+A data element will have the following properties
+
+|===
+|Field | Required | Description
 |
 ===|
 
