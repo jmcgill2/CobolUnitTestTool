@@ -59,7 +59,7 @@ The following fields are available to create Unit test cases.
 |Field | Required | Description
 |*test-start*|Yes|Required to indicate the start of new test.
 |*paragraph-name* | Yes | Original paragraph in the Cobol Program.
-|*test-description | No | Description of the test
+|*test-description* | No | Description of the test
 |*test-end* |Yes | Required to indicate the end of a test.
 |
 ===|
