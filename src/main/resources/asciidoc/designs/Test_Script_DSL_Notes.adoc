@@ -16,12 +16,29 @@ The same is true for access to the location where outputs would be written out.
 === Program Information
 The test script would have to include the following: +
 
-*  The program name and location
-*  The copybook location(s)
-* The Location for the output test program
-* The location for the output test script/JCL
+*  The input program name and location
+*  The input copybook location(s)
+* The Location for the output test program(s)
+* The location for the output test script/JCL to compile/execute the test program(s)
+* The name of the test program(s)
+** If there are multiple programs a test naming strategy might be involved
+* The location of the generated executable test program
+
+=== Program Level Test Settings
+Although each test case has specialized settings depending on the test and program level
+defaults should be able to be overriden at the test case level, at times there is great value
+in setting certain properties at the program level rather than requiring them to be set for
+each test case.  Here are the properties.
+
+.Program Level Test Properties
+[cols="25%,10%,10%,55%"]
+|===
+|Property|Option|Default|Description
+|Negative Tests|Yes/No|Yes|Should the test case test conduct negative testing (see Negative Testing below)
+|===
 
 === Report Information
+
 The test results will need to be stored so they can be reported.  The types of storage and the particulars of the
 storage information.  The two obvious ways to store results are in files or databases.
 
@@ -36,3 +53,42 @@ storage information.  The two obvious ways to store results are in files or data
 ** Database Access Information
 ** Format Information (Not the entire format but some reference to the format to use)
 
+== Test Case Information
+
+Test cases are the main component of and reason for the test script.  Test scripts will have one or more test cases.  Each test case contains the following.
+
+
+
+== Negative Testing
+
+Negative testing is testing variables that are not expected to change to
+ensure that they did not change.  This will increase the likelihood dramatically
+that changes to the code in a paragraph that is tested without changes to the tests
+themselves will result in test errors because the population of data elements that
+were never anticiapated would lead to test failures.
+
+Cobol programs are required to identify all the memory they need to operate
+so this will not be as hard as with other programming languages and could be
+more complete than most too.
+
+The process would work by first initializing all the variables associated with
+the paragraph (see Initializing Variables below) and then comparing not just the
+variables that are expected to change with the expected values but
+comparing all the other variables used in the paragraph to the initialized variable
+and creating an error if the values don't match.
+
+== Initializing Variables
+
+Initializing all the variables at a paragraph level is key for clean
+testing in general and negative testing in particular.
+
+Initializing variables requires that all the variables in play are known.
+This may not always be simple.  If a single variable that is part of a group
+variable is modified all the variables in the group variable must be initialized.  If the
+variable is part of a redefines, that is the variable that should be initialized
+and validated, not the original variable.
+
+The Initialize command does not actually initialize all variables.  Filler
+variables are not initialized.  To initialize them, the group level variable must be
+populated with spaces first and then the group level data element can be
+initialized.
