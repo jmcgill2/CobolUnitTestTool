@@ -56,7 +56,103 @@ storage information.  The two obvious ways to store results are in files or data
 == Test Case Information
 
 Test cases are the main component of and reason for the test script.  Test scripts will have one or more test cases.  Each test case contains the following.
+Each test case is a single test so a given paragraph could have zero to many test cases depending on how many tests are
+needed to test the paragraph.  This is just one reason why multiple prgrams may be needed/preferred to better organize
+the test cases.
 
+A test case has the following properties:
+
+.Test Case Level Test Properties
+|===
+|Property|Required?|Description
+|*Test Case Name*| Yes| The name of the test case.  It should be meaningful.
+|*Test Case ID*|Yes|A unique (to the script) identifying meeting the test case Id standards (see Test Case Id below)
+|*Test Case Description*|Yes|A description of the test case
+|*Test Case Paragraph*|Yes|The name of the paragraph to be tested
+|*Perform Negative Testing*|No|Default is whatever is set at the program level or whatever the program level
+default is.  However, the test case designation will take precedence over the program level setting so only set at the test
+case level if you do want to override the program level settings.
+|*Test Input*|No|Provide any test inputs needed to test the paragraph.  See Test Inputs below for more information.
+|*Expected Test Output*|Yes|Provide all expected test outputs.  See Expected Test Outputs below for more information.
+|===
+
+=== Test Case Id
+Each test case must have a unique (to the test script) Id.  TODO - think this through - maybe we should programatically
+do this?
+
+This unique ID will enable the easier grouping of error messages to a test case.
+
+Each Id should be a unique integer > 0.  Or should it be character?
+
+=== Test Inputs
+For each test case input you will need the following attributes:
+
+.Test Case Input Attributes
+|===
+|Attribute|Required?|Description
+|*Data Element Name* |Yes|The name of the data element to be populated
+|*Data Value*|Yes|The data value to be entered in that field.  If the data is voluminous, you can reference
+where at the end of the script or in an attached file to get the input data (say a large file line input)
+|===
+
+If you have multiple test case inputs you will create one test case input for each.
+
+The test case inputs will be turned into move statements in the test program.
+
+When validating the test script, the value provided will be compared to the size and type of the input variable to ensure a match.
+
+=== Expected Test Outputs
+
+For each test the expected output for each value that changes should be identified.  This is important
+for ensuring test accuracy under any circumstance but if negative testing is done the failure to
+identify expected test outcomes will cause test failures.
+
+For each data element that is expected to change, an expected test output with the following
+attributes will be required:
+
+.Expected Values
+|===
+|Attribute|Required?|Description
+|*Data Element Name* |Yes|The name of the data element to be populated
+|*Data Value*|Yes|The data value that should be in that field.  If the data is voluminous, you can reference
+where at the end of the script or in an attached file to get the input data (say a large file line input)
+|===
+
+If you are mocking lines in a paragraph but expect certain expected values to be generted there see
+Mocks below for more information on how to indicate these expected values.
+
+=== Mocks
+
+Frequently Cobol paragraphs contain code that does more than just manipulate values.  It attempts to execute actions that are
+not limited to the paragraph.  Examples of this type of activity include:
+
+.Paragraph Actions
+[cols="25%,75%"]
+|===
+|Action|Description
+|*READ* |Read from a file
+|*WRITE*|Write to a file
+|*EXEC SQL*| Execute Sql statement against a database
+|*CALL*| Call another program
+|*PERFORM*| Perform a call to another paragraph or set of parargraphs (PERFORM THRU) and then return
+|*GOTO*|Move to another part of the program without returning.
+|*GOBACK*|End the program
+|===
+
+Unit tests don't actually read or write files or access databases or call other programs.  Instead,
+we mock these calls so that we can simulate doing that activity.  For each test case, there must be
+the ability to mock one or more commands if necessary.
+
+Mocking requires the following:
+
+* The identification of the command to be mocked
+* The effect that should be simulated if/when the mock is executed.  This will differ based on the
+type of activity mocked.  For example, a read statement would mock the input the read should generate.
+A call to another program should simulate expected return values given the inputs.  (Remember, we are testing this paragraph
+not the called program).
+* Identification of any expected results that should be triggered.  For example, if you would
+expect that the inputs would execute a write statement you would want to know that the write statement
+was executed one (and only one) time.
 
 
 == Negative Testing
@@ -92,3 +188,4 @@ The Initialize command does not actually initialize all variables.  Filler
 variables are not initialized.  To initialize them, the group level variable must be
 populated with spaces first and then the group level data element can be
 initialized.
+
