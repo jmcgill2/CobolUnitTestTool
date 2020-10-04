@@ -9,9 +9,21 @@ class CobolUtils {
 
     FileUtils fileUtils = new FileUtils()
 
+    int commentColumnNumber
+
+    int columnANumber
+
+    int columnBNumber
+
     public CobolUtils() {
 
 
+    }
+
+    public CobolUtils(int commentColumnNumber, int columnANumber, int columnBNumber){
+        this.commentColumnNumber = commentColumnNumber
+        this.columnANumber = columnANumber
+        this.columnBNumber = columnBNumber
     }
 
     public void identifySqlLines(ArrayList<CobolLine> cobolLines){
@@ -42,10 +54,14 @@ class CobolUtils {
     }
 
     public isComment(String line){
+        return isComment(line, commentColumnNumber)
+    }
+
+    public boolean isComment(String line, int _commentColumnNumber){
 
         boolean isComment = false
-        if (line != null && line.size() >= Constants.commentIndLocation) {
-            if (line.substring(Constants.commentIndLocation).startsWith("*")) {
+        if (line != null && line.size() >= _commentColumnNumber) {
+            if (line.substring(_commentColumnNumber).startsWith("*")) {
                 isComment = true
             }
         }

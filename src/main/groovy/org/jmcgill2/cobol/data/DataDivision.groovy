@@ -24,6 +24,7 @@ class DataDivision {
 
     DataDivision(ArrayList<CobolLine> dataDivisionLines){
         this.dataDivisionLines = dataDivisionLines
+        //TODO - Figure out how to populate fileSection, WorkingStorageSection and LinkageSection with dataDivisionLines
     }
 
     DataDivision(FileSection fileSection, WorkingStorageSection workingStorageSection, LinkageSection linkageSection,

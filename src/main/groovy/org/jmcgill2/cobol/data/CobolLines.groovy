@@ -53,7 +53,7 @@ class CobolLines {
     }
 
     void run(){
-        for (x in 0..10){
+        for (x in 0..programCobolLines.size() - 1){
             println programCobolLines[x]
         }
     }

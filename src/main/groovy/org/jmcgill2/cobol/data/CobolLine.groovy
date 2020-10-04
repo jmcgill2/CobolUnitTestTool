@@ -67,7 +67,7 @@ class CobolLine {
     /**
      * Does the cobol line start a Data Element.  For comments, this is false.
      */
-    boolean isStartOfDataElement = false
+    boolean isStartOfDataElement
 
     /**
      * Is this cobol line part of a data element?  True if it is part of a data element but not the start of a data
@@ -114,13 +114,32 @@ class CobolLine {
         this.lastCobolColumnNumber = lastCobolColumnNumber
         this.isComment = cobolUtils.isComment(line, commentColumnNumber)
         this.isColumnA = this.cobolUtils.isColumnA(line)
+        this.isColumnB = (!this.isComment && line.trim().size() > 11 && !this.isColumnA) ? true : false
         this.lineNumber = lineNumber
-        lookForCalledProgram(line)
         this.line = line
         this.cobolContent = extractCobolContent(line)
         this.endsWithAPeriod = doesCobolLineEndWithParagrah()
+        this.containsCalledProgram = lookForCalledProgram()
+        this.preCobolContent = findPreCobolContent()
+        this.postCobolContent = findPostCobolContent()
+//        this.isStartOfDataElement = (!isComment && )
 
+    }
 
+    String findPostCobolContent(){
+        String postCobolInfo = ""
+        if (line.size() > lastCobolColumnNumber){
+            postCobolInfo = line.substring(lastCobolColumnNumber)
+        }
+        return postCobolInfo
+    }
+
+    String findPreCobolContent(){
+        String preCobolInfo = ""
+        if (line.size() > commentColumnNumber ){
+            preCobolInfo = line.substring(0, commentColumnNumber)
+        }
+        return preCobolInfo
     }
 
     /**
@@ -166,8 +185,11 @@ class CobolLine {
         return cobolLine
     }
 
-    lookForCalledProgram (String line) {
-        containsCalledProgram = !isComment && !isColumnA && line.contains(" CALL ")
+    /**
+     * Returns true if the line is not a comment, is not in Column A and calls a program.
+     */
+    boolean lookForCalledProgram () {
+         return !isComment && !isColumnA && cobolContent.contains(" CALL ")
     }
 
     String getLineWithoutLineNumber() {
@@ -192,7 +214,9 @@ class CobolLine {
         str += "isComment: ${isComment}\n"
         str += "commentColumnNumber: ${commentColumnNumber}\n"
         str += "columnANumber: ${columnANumber}\n"
-        str += "columnBNumber: ${columnBNumber}\n\n"
+        str += "columnBNumber: ${columnBNumber}\n"
+        str += "preCobolContent: ${preCobolContent}\n"
+        str += "postCobolContent: ${postCobolContent}\n\n"
         return str.toString()
     }
 }

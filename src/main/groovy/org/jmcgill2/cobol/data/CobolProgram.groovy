@@ -62,7 +62,7 @@ class CobolProgram {
 
         copybooks = cobolUtils.readCopybooks(copybookLocations, programLines)
 
-        workingStorage = new WorkingStorageSection(programElements)
+        DataDivision dataDivision = new DataDivision()
 
         procedureDivision = new ProcedureDivision(cobolLines)
 
