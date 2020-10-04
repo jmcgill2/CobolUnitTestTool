@@ -63,6 +63,7 @@ the test cases.
 A test case has the following properties:
 
 .Test Case Level Test Properties
+[cols="25%,15%,60%"]
 |===
 |Property|Required?|Description
 |*Test Case Name*| Yes| The name of the test case.  It should be meaningful.
@@ -88,6 +89,7 @@ Each Id should be a unique integer > 0.  Or should it be character?
 For each test case input you will need the following attributes:
 
 .Test Case Input Attributes
+[cols="25%,15%,60%"]
 |===
 |Attribute|Required?|Description
 |*Data Element Name* |Yes|The name of the data element to be populated
@@ -111,6 +113,7 @@ For each data element that is expected to change, an expected test output with t
 attributes will be required:
 
 .Expected Values
+[cols="25%,15%,60%"]
 |===
 |Attribute|Required?|Description
 |*Data Element Name* |Yes|The name of the data element to be populated
